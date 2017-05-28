@@ -1,0 +1,137 @@
+ {{>headerAdmin}}
+
+<div style="margin-top:70px;" class="container">
+
+  <div class="page-header text-left">
+
+
+
+
+  <div  class="panelEdit row">
+
+  <div class="well bs-component col-md-9 ">
+
+  <div style="padding-top:40px; padding-bottom:50px;" class="col-md-10 col-md-offset-1">
+     
+        
+   
+
+      <h3 for=""> Tambah Konten Berita</h3>
+      <hr>
+      <div class="form-group">
+
+        <label for="">Judul Berita</label>
+
+        <br>
+        <div>
+          <input id="judulBerita" class="form-control" type="" name="judul" value="">
+
+        </div>
+
+      </div>
+       <div class="form-group">
+
+        <label for="">Ringkasan Berita</label>
+        <br>
+        <div>
+          <textarea id="ringkasan" class="form-control" type="" name="ringkasan" value=""></textarea>
+
+        </div>
+        <br>
+      </div>
+
+
+
+
+      <div id="editor-container">
+
+        <label for="editor-container" class="control-label">       
+                                  </label>
+        <hr>
+      </div>
+
+
+     
+
+
+
+
+
+      <div class="form-group text-right">
+        <a id="clickSoal" class="btn btn-raised btn-info" type="submit">Tambah Berita</a>
+      </div>
+
+
+
+
+
+    </div>
+   </div>
+  </div>
+
+
+</div>
+
+
+
+
+{{>footer}}
+<script>
+  var quill = new Quill('#editor-container', {
+    modules: {
+      toolbar: [
+        ['bold', 'italic'],
+        ['link', 'blockquote', 'code-block', 'image'],
+        [{
+          list: 'ordered'
+        }, {
+          list: 'bullet'
+        }]
+      ]
+    },
+    placeholder: 'Compose an epic...',
+    theme: 'snow'
+  });
+
+
+
+  quill.on('selection-change', function (range) {
+    console.log('selection-change', range)
+  });
+  quill.on('text-change', function (delta, source) {
+    console.log('text-change', delta, source)
+  });
+
+  $("#clickSoal").click(function () {
+
+    alert('Data Masuk');
+
+    var isiBerita = document.querySelector(".ql-editor").innerHTML;
+    var judulBerita = $("#judulBerita").val();
+    var ringkasanBerita = $("#ringkasan").val();
+   
+
+    // alert(subject);
+    // alert(email);
+
+    var request = $.ajax({
+      url: "http://127.0.0.1:3000/add-berita",
+      method: "POST",
+      data: {
+        isiBerita: isiBerita,
+        judulBerita: judulBerita,
+        ringkasanBerita: ringkasanBerita,
+      },
+      dataType: "html"
+    });
+
+    request.done(function (msg) {
+      $("#log").html(msg);
+    });
+
+    request.fail(function (jqXHR, textStatus) {
+      console.log("Request failed: " + textStatus);
+    });
+
+  })
+</script>
